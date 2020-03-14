@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel='icon' href='/img/icon.png' />
+        <link rel="stylesheet" href="/css/bootstrap.min.css"  crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/bootstrap-theme.min.css" crossorigin="anonymous">
+        <link href="/css/jquery.autocomplete.css" rel="stylesheet" type="text/css" />
+        <script src="/js/bootstrap.min.js" crossorigin="anonymous"></script>
+        <script src="/js/jquery.min.js"></script>
+        <script type="text/javascript" src="/js/jquery.autocomplete.js"></script>
+        <script type="text/javascript" src="/js/modal.js"></script>
+        <script type="text/javascript" src="/js/jqdownload.js"></script>
+        <script type="text/javascript" src="/js/clock.js"></script>
+        {% block customjs %} {% endblock %}
+        <link rel='stylesheet' href='/css/style.css' />
+    </head>
+    <body>
+    <div id='header'>
+        <div class='row'>
+            <div id='logo' class='col-xs-3'>
+                <img src='https://nais.gov.ua/design/css/img/logo.svg' width='100px' />
+            </div>
+            <div id='logo-text' class='col-xs-6'> Одесская филия "НАИС"</div>
+            <div id='calendar' class='col-xs-2'>
+                <!-- calendar -->
+                <script type="text/javascript"> showCalendar('{{ calendar }}');</script>
+                <div id='jqdownload'> </div>
+                <!-- /calendar -->
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-xs-2'>
+                <div class="clock">
+                    <div id="Date"></div>
+                    <ul>
+                        <li id="hrs"></li>
+                        <li id="col">:</li>
+                        <li id="min"></li>
+                        <li id="col">:</li>
+                        <li id="sec"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class='col-xs-10'>
+                <div id='headerbar'>
+                    <div class='btn btn-group'>
+                        <div id='headerbt' class='col-xs-2'>
+                        </div>
+                        <div id='headerbt' class='col-xs-2'>
+                            <button id='headerbt' class='btn btn-warning button-block' onclick="document.location.href='/'">Главная</button>
+                        </div>
+                        <div id='headerbt' class='col-xs-2'>
+                            <button id='headerbt' class='btn btn-warning button-block' onclick="document.location.href='/calls'">Звонки</button>
+                        </div>
+                        <div id='headerbt' class='col-xs-2'>
+                            <button id='headerbt' class='btn btn-warning button-block' onclick="document.location.href='/mail'">Почта</button>
+                        </div>
+                        <div id='headerbt' class='col-xs-2'>
+                            <button id='headerbt' class='btn btn-warning button-block' onclick="document.location.href='/maintenance'">Выезды</button>
+                        </div>
+                        <div id='headerbt' class='col-xs-2'>
+                            <button id='headerbt' class='btn btn-warning button-block' onclick="document.location.href='/know'">База знаний</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id='userbar' class='row'>
+        Добрый день, <b>  <a href='/user/logout'> [виход]</a> </b>
+    </div>
+    <div id='content' class="container">
+        {% block body %}{% endblock %}
+        {% block javascripts %}{% endblock %}
+    </div>
+    <script type="text/javascript">
+    $(function() {
+    $(window).scroll(function() {
+    if($(this).scrollTop() != 0) {
+    $('#toTop').fadeIn();
+    } else {
+    $('#toTop').fadeOut();
+    }
+    });
+    $('#toTop').click(function() {
+    $('body,html').animate({scrollTop:0},800);
+    });
+    });
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            $(window).scroll(function() {
+                if($(this).scrollTop() == 0) {
+                    $('#toBottom').fadeIn();
+                } else {
+                    $('#toBottom').fadeOut();
+                }
+            });
+            $('#toBottom').click(function() {
+                $('body,html').animate({scrollTop:20000},800);
+            });
+        });
+    </script>
+    <DIV ID = "toTop" > ^ Наверх </DIV>
+    <DIV ID = "toBottom" > Вниз </DIV>
+    <div id='footer' class='col-xs-12'>
+        &copy Отдел технической поддержки Одеськой филии ДП "НАИС" 2018 - 2020 <a target='_blanck' href=''></a> <br />
+    </div>
+
+    </body>
+</html>

@@ -1,0 +1,108 @@
+doctrine:
+    dbal:
+        default_connection: glb
+        connections:
+            glb:
+                url: '%env(DB_GLB)%'
+                driver: 'pdo_mysql'
+                server_version: '5.7'
+                charset: utf8mb4
+            od:
+                url: '%env(DB_OD)%'
+                driver: 'pdo_mysql'
+                server_version: '5.7'
+                charset: utf8mb4
+    orm:
+        default_entity_manager: glb
+        entity_managers:
+            glb:
+                connection: glb
+                mappings:
+                    ClientType:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity'
+                        prefix: 'App\Entity\ClientType'
+                        alias: ClientType
+                    Know:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity'
+                        prefix: 'App\Entity\Know'
+                        alias: know
+                    MailType:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity'
+                        prefix: 'App\Entity\MailType'
+                        alias: mailType
+                    Resource:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity'
+                        prefix: 'App\Entity\Resource'
+                        alias: resource
+                    ResourceKnow:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity'
+                        prefix: 'App\Entity\Resource'
+                        alias: resourceKnow
+                    Users:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity'
+                        prefix: 'App\Entity\Users'
+                        alias: users
+                    Modules:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity'
+                        prefix: 'App\Entity\Modules'
+                        alias: modules
+            od:
+                connection: od
+                mappings:
+                    Calls:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity'
+                        prefix: 'App\Entity\Calls'
+                        alias: calls
+                    Clients:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity'
+                        prefix: 'App\Entity\Clients'
+                        alias: clients
+                    Gauth:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity'
+                        prefix: 'App\Entity\Gauth'
+                        alias: gauth
+                    Mail:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity'
+                        prefix: 'App\Entity\Mail'
+                        alias: mail
+                    Mail_notes:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity'
+                        prefix: 'App\Entity\Mail_notes'
+                        alias: mail_notes
+                    Maintenance:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity'
+                        prefix: 'App\Entity\Maintenance'
+                        alias: maintenance
+                    Maintenance_contract:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity'
+                        prefix: 'App\Entity\Maintenance_contract'
+                        alias: maintenance_contract
+

@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Главная Страница ОФ НАИС{% endblock %}
+
+{% block body %}
+
+        <div id='index-text' class='row'>
+            <div id="index">
+                {% for modules in modules %}
+                    <div class='col-xs-4'>
+                        <a href='{{ modules.url }}'><img src='{{modules.icon}}' /></a><br />
+                        <a href='{{ modules.url }}'>{{ modules.title }}</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+
+{% endblock %}
