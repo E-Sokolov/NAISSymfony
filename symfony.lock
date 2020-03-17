@@ -115,7 +115,7 @@
         "version": "2.7.0"
     },
     "php": {
-        "version": "7.4"
+        "version": "7.2"
     },
     "phpdocumentor/reflection-common": {
         "version": "2.0.0"
@@ -151,6 +151,18 @@
         },
         "files": [
             "./config/packages/sensio_framework_extra.yaml"
+        ]
+    },
+    "symfony/apache-pack": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "410b9325a37ef86f1e47262c61738f6202202bca"
+        },
+        "files": [
+            "public/.htaccess"
         ]
     },
     "symfony/asset": {
@@ -528,5 +540,11 @@
     },
     "webmozart/assert": {
         "version": "1.7.0"
+    },
+    "zendframework/zend-code": {
+        "version": "3.4.1"
+    },
+    "zendframework/zend-eventmanager": {
+        "version": "3.2.1"
     }
 }

@@ -91,8 +91,8 @@ doctrine:
                         is_bundle: false
                         type: annotation
                         dir: '%kernel.project_dir%/src/Entity'
-                        prefix: 'App\Entity\Mail_notes'
-                        alias: mail_notes
+                        prefix: 'App\Entity\MailNotes'
+                        alias: mailNotes
                     Maintenance:
                         is_bundle: false
                         type: annotation
@@ -103,6 +103,6 @@ doctrine:
                         is_bundle: false
                         type: annotation
                         dir: '%kernel.project_dir%/src/Entity'
-                        prefix: 'App\Entity\Maintenance_contract'
-                        alias: maintenance_contract
+                        prefix: 'App\Entity\MaintenanceContract'
+                        alias: maintenanceContract
 

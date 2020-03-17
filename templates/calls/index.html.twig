@@ -27,7 +27,7 @@
                         <tr id='tablerow'>
                             <th id='tablecol'>Дата звернення
                                 <input type="date" style="width: 150px !important" id='date1' value="$date1" class='form-control' />
-                                <input type="date" style="width: 150px !important" id='date2' onblur="insertDate()" value=" $date2" class='form-control' />
+                                <input type="date" style="width: 150px !important" id='date2' onblur="insertDate()" value="$date2" class='form-control' />
                                 <input type="hidden" name='date' />
                             </th>
                             <th id='tablecol'>Тип
@@ -95,36 +95,35 @@
                                 <input class='form-control' type='submit' id='go' value='Go' /> </th>
                         </tr>
                     </form>
-                    <?php
-			foreach($callsList as $callItem){
-                    <tr id='tablerow' if($callItem['status'] == 0){ style="color: yellow; text-shadow: #FF0000 1px -2px 2px;"   >
-                    <td id='tablecol'>$callItem['date']; ?>( date('H:i', strtotime($callItem['time'])); )</td>
-                    <td id='tablecol'> $clientTypeList[$callItem['client_type']]['type']; </td>
-                    <td id='tablecol'>< $callItem['client']; ?></td>
-                    <td id='tablecol'><  $callItem['fio']; ?></td>
-                    <td id='tablecol'> $resource[$callItem['resource']]['resource']; </td>
-                    <td id='tablecol'> $callItem['description']; ?></td>
-                    <td id='tablecol'> $callItem['what_to_do']; ?></td>
-                    <td id='tablecol'> $user[$callItem['ingeneer']]['short_name']; </td>
-                    <td id='tablecol'>  $callItem['service']; ?></td>
-                    <td id='tablecol'> echo $callItem['trip']; ?></td>
-                    <td id='tablecol'> if($callItem['date_success'] != Null){ echo date("d.m.Y (H:i)", strtotime($callItem['date_success']));} </td>
-                    <td id='tablecol'> echo $callItem['etc_data']; </td>
+			    {% for call in calls %}
+                    <tr id='tablerow' { %if(call.status == 0) %} style="color: yellow; text-shadow: #FF0000 1px -2px 2px;" { %endif% }  >
+                    <td id='tablecol'> {{ call.date|date("d.m.Y H:i") }}</td>
+                    <td id='tablecol'>{{ call.clienttype }}</td>
+                    <td id='tablecol'>{{ call.client}}</td>
+                    <td id='tablecol'>{{ call.fio }}</td>
+                    <td id='tablecol'>{{call.resource}}</td>
+                    <td id='tablecol'> {{call.description}}</td>
+                    <td id='tablecol'> {{call.whattodo}}</td>
+                    <td id='tablecol'> {{call.ingeneer }} </td>
+                    <td id='tablecol'> {{call.service}}</td>
+                    <td id='tablecol'> {{call.trip}}</td>
+                    <td id='tablecol'> {{call.datesuccess|date("d.m.Y H:i") }} </td>
+                    <td id='tablecol'> {{call.etcdata}} </td>
                     <td id='tablecol'>
                         <div id='oneline'>
-                            <a href='/calls/edit/$callItem['id']' title='Редагувати'>
-                            <img src='/views/elements/img/edit.png' />
+                            <a href='/calls/edit/{{call.id}}' title='Редагувати'>
+                            <img src='/img/edit.png' />
                             </a>
-                            <a href='/calls/add/$callItem['id'];' title='Копіювати'>
-                            <img src='/views/elements/img/copy.png' />
+                            <a href='/calls/add/{{call.id}}' title='Копіювати'>
+                            <img src='/img/copy.png' />
                             </a>
-                            <a onclick="if(confirm('Ви впевнені?'))location.href='/calls/delete/$callItem['id'];';" title='Видалити'>
-                                <img src='/views/elements/img/delete.png' />
+                            <a onclick="if(confirm('Вы уверены?'))location.href='/calls/delete/{{call.id}}'" title='Видалити'>
+                                <img src='/img/delete.png' />
                             </a>
                         </div>
                     </td>
                     </tr>
-
+                {% endfor %}
 
                 </table>
             </div>

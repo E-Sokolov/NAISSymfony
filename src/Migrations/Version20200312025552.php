@@ -21,7 +21,7 @@ final class Version20200312025552 extends AbstractMigration
     {
         $this->addSql("INSERT INTO `Modules` (`id`, `url`, `icon`,`title`) VALUES
                     (1, '/calls', '/img/calls.png','Журнал Звонков'),
-                    (2, '/mail', '/img/mail.png','База E-mail'),
+                    (2, '/mail', '/img/email.png','База E-mail'),
                     (3, '/know', '/img/know.png','База знаний'),
                     (4, '/maintenance', '/img/maintenance.png', 'Выезды инженеров'),
                     (5, '/profile','/img/profile.png','Работники филии'),
