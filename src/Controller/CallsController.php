@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\ClientType;
+use App\Entity\Resource;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 use App\Entity\Calls;
+use App\Entity\Users;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,12 +19,30 @@ class CallsController extends AbstractController
      */
     public function index()
     {
+        $resourceArr = array();
+        $clientTypeArr = array();
+        $userArr = array();
         $calendar = date('m',mktime(0,0,0,date('m',time())+1,0,date('Y',time())));
         $calls = $this -> getDoctrine()->getRepository(Calls::class)->findBy(array(),array('date' => 'DESC'));
+        $resource = $this -> getDoctrine() -> getRepository(Resource::class)->findAll();
+        $clientType = $this -> getDoctrine() -> getRepository(ClientType::class)->findAll();
+        $users = $this -> getDoctrine() -> getRepository(Users::class) -> findAll();
+        //var_dump($users);
+        foreach ($calls as $call){
+            $resourceEl = $resource[$call ->getResource() -1];
+            $resourceArr[$call ->getResource()] = $resourceEl ->getResource();
+            $clientTypeEl = $clientType[$call->getClientType() -2];
+            $clientTypeArr[$call ->getClientType()] = $clientTypeEl -> getType();
+            //$userEl = $users[$call->getIngeneer()];
+            //$userArr[$call ->getClientType()] = $userEl -> getUser();
+        }
         return $this->render('calls/index.html.twig', [
             'controller_name' => 'CallsController',
             'calendar' => $calendar,
-            'calls' => $calls
+            'calls' => $calls,
+            'resource' => $resourceArr,
+            'clientType' => $clientTypeArr,
+            'user' => $userArr
         ]);
     }
     /**

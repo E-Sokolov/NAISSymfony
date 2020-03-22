@@ -95,33 +95,34 @@
                                 <input class='form-control' type='submit' id='go' value='Go' /> </th>
                         </tr>
                     </form>
+
 			    {% for call in calls %}
-                    <tr id='tablerow' { %if(call.status == 0) %} style="color: yellow; text-shadow: #FF0000 1px -2px 2px;" { %endif% }  >
-                    <td id='tablecol'> {{ call.date|date("d.m.Y H:i") }}</td>
-                    <td id='tablecol'>{{ call.clienttype }}</td>
-                    <td id='tablecol'>{{ call.client}}</td>
-                    <td id='tablecol'>{{ call.fio }}</td>
-                    <td id='tablecol'>{{call.resource}}</td>
-                    <td id='tablecol'> {{call.description}}</td>
-                    <td id='tablecol'> {{call.whattodo}}</td>
-                    <td id='tablecol'> {{call.ingeneer }} </td>
-                    <td id='tablecol'> {{call.service}}</td>
-                    <td id='tablecol'> {{call.trip}}</td>
-                    <td id='tablecol'> {{call.datesuccess|date("d.m.Y H:i") }} </td>
-                    <td id='tablecol'> {{call.etcdata}} </td>
-                    <td id='tablecol'>
-                        <div id='oneline'>
-                            <a href='/calls/edit/{{call.id}}' title='Редагувати'>
-                            <img src='/img/edit.png' />
-                            </a>
-                            <a href='/calls/add/{{call.id}}' title='Копіювати'>
-                            <img src='/img/copy.png' />
-                            </a>
-                            <a onclick="if(confirm('Вы уверены?'))location.href='/calls/delete/{{call.id}}'" title='Видалити'>
-                                <img src='/img/delete.png' />
-                            </a>
-                        </div>
-                    </td>
+                        <tr id='tablerow'  {% if(call.status == false) %}style="color: yellow; text-shadow: #FF0000 1px -2px 2px;" {% endif %}>
+                        <td id='tablecol'> {{ call.date|date("d.m.Y H:i") }}</td>
+                        <td id='tablecol'>{{ clientType[call.clientType] }}</td>
+                        <td id='tablecol'>{{ call.client}}</td>
+                        <td id='tablecol'>{{ call.fio }}</td>
+                        <td id='tablecol'>{{ resource[call.resource] }}</td>
+                        <td id='tablecol'> {{call.description}}</td>
+                        <td id='tablecol'> {{call.whattodo}}</td>
+                        <td id='tablecol'> {{call.ingeneer }} </td>
+                        <td id='tablecol'> {{call.service}}</td>
+                        <td id='tablecol'> {{call.trip}}</td>
+                        <td id='tablecol'> {{call.datesuccess|date("d.m.Y H:i") }} </td>
+                        <td id='tablecol'> {{call.etcdata}} </td>
+                        <td id='tablecol'>
+                            <div id='oneline'>
+                                <a href='/calls/edit/{{call.id}}' title='Редагувати'>
+                                    <img src='/img/edit.png' />
+                                </a>
+                                <a href='/calls/add/{{call.id}}' title='Копіювати'>
+                                    <img src='/img/copy.png' />
+                                </a>
+                                <a onclick="if(confirm('Вы уверены?'))location.href='/calls/delete/{{call.id}}'" title='Видалити'>
+                                    <img src='/img/delete.png' />
+                                </a>
+                            </div>
+                        </td>
                     </tr>
                 {% endfor %}
 
