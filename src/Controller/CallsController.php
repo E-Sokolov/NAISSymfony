@@ -27,14 +27,13 @@ class CallsController extends AbstractController
         $resource = $this -> getDoctrine() -> getRepository(Resource::class)->findAll();
         $clientType = $this -> getDoctrine() -> getRepository(ClientType::class)->findAll();
         $users = $this -> getDoctrine() -> getRepository(Users::class) -> findAll();
-        //var_dump($users);
         foreach ($calls as $call){
             $resourceEl = $resource[$call ->getResource() -1];
             $resourceArr[$call ->getResource()] = $resourceEl ->getResource();
             $clientTypeEl = $clientType[$call->getClientType() -2];
             $clientTypeArr[$call ->getClientType()] = $clientTypeEl -> getType();
-            //$userEl = $users[$call->getIngeneer()];
-            //$userArr[$call ->getClientType()] = $userEl -> getUser();
+            $userEl = $users[$call->getIngeneer() -1];
+            $userArr[$call ->getIngeneer()] = $userEl -> getShortName();
         }
         return $this->render('calls/index.html.twig', [
             'controller_name' => 'CallsController',
@@ -108,6 +107,6 @@ class CallsController extends AbstractController
             $entity -> persist($calls);
             $entity -> flush();
         }
-        return new Response('Saved new product with id '.$calls->getId());
+        return new Response('Saved new call with id '.$calls->getId());
     }
 }

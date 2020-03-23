@@ -20,7 +20,7 @@ final class Version20200311060313 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-        $this->addSql( "INSERT INTO `clienttype` (`id`, `type`, `description`, `active`) VALUES
+        $this->addSql( "INSERT INTO `ClientType` (`id`, `type`, `description`, `active`) VALUES
                     (2, 'Адвокат', 'Адвокати', '1'),
                     (3, 'АК', 'Арбітражні керуючі', '1'),
                     (4, 'АС', 'Акредитовані суб\'єкти (КП, БТІ та ін.)', '1'),
@@ -56,7 +56,7 @@ final class Version20200311060313 extends AbstractMigration
                     (6, 'Філія', 'Філія');
         ");
         $this->addSql("
-                    INSERT INTO `resource` (`id`, `resource`, `fullname`) VALUES
+                    INSERT INTO `Resource` (`id`, `resource`, `fullname`) VALUES
                     (1, 'РНБ', 'Єдиний реєстр спеціальних бланків нотаріальних документів'),
                     (2, 'РСМ', 'Державний реєстр субэктiв минюста'),
                     (3, 'ДРОРМ', 'Державний реєстр обтяжень рухомого майна'),
@@ -98,8 +98,8 @@ final class Version20200311060313 extends AbstractMigration
     public function down(Schema $schema) : void
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-        $this->addSql( "TRUNCATE clienttype");
+        $this->addSql( "TRUNCATE ClientType");
         $this->addSql( "TRUNCATE mailtype");
-        $this->addSql( "TRUNCATE resource");
+        $this->addSql( "TRUNCATE Resource");
     }
 }
