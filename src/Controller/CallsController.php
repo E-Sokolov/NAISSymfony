@@ -4,13 +4,20 @@ namespace App\Controller;
 
 use App\Entity\ClientType;
 use App\Entity\Resource;
+//use Doctrine\DBAL\Types\DateType;
+use App\Repository\UsersRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Routing\Annotation\Route;
 
 use App\Entity\Calls;
 use App\Entity\Users;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class CallsController extends AbstractController
 {
@@ -19,6 +26,7 @@ class CallsController extends AbstractController
      */
     public function index()
     {
+        $callsObj = new Calls;
         $resourceArr = array();
         $clientTypeArr = array();
         $userArr = array();
@@ -27,6 +35,40 @@ class CallsController extends AbstractController
         $resource = $this -> getDoctrine() -> getRepository(Resource::class)->findAll();
         $clientType = $this -> getDoctrine() -> getRepository(ClientType::class)->findAll();
         $users = $this -> getDoctrine() -> getRepository(Users::class) -> findAll();
+        $searchForm = $this -> createFormBuilder($callsObj)
+                                    ->add('date',DateType::class,['label'=>'Дата обращения','required' =>false])
+                                    ->add('clientType', EntityType::class,[
+                                        'class' => clientType::class,
+                                        'label' => 'Тип',
+                                        'choice_label' => 'type',
+                                        'required' =>false,
+                                        ])
+                                    ->add('client',TextType::class,['label' => 'Заявитель','required' =>false])
+                                    ->add('fio',TextType::class,['label' => 'Ф.И.О','required' =>false])
+                                    ->add('resource', EntityType::class,[
+                                        'class' => Resource::class,
+                                        'label' => 'Реестр',
+                                        'choice_label'=> 'resource',
+                                        'required' =>false
+                                    ])
+                                    ->add('description',TextType::class,['label' => 'Описание','required' =>false])
+                                    ->add('what_to_do',TextType::class,['label' => 'Что сделано','required' =>false])
+                                    ->add('ingeneer',EntityType::class,[
+                                        'class' => Users::class,
+                                        'label' => 'Исполнитель',
+                                        'query_builder' => function (UsersRepository $usr) {
+                                            return $usr->createQueryBuilder('u')
+                                                ->where('u.dep=\'ing\'')
+                                                ->andWhere('u.password != \'fired\'');
+                                        },
+                                        'choice_label' => 'short_name',
+                                        'required' =>false
+                                    ])
+                                    ->add('etc_data', TextType::class,['label' => 'Дополнительно','required' =>false])
+                                    ->add('status', CheckboxType::class,['required' =>false])
+                                    ->add('submit',SubmitType::class,['label'=> 'Поиск'])
+                                    ->getForm();
+        var_dump($_POST);
         foreach ($calls as $call){
             $resourceEl = $resource[$call ->getResource() -1];
             $resourceArr[$call ->getResource()] = $resourceEl ->getResource();
@@ -41,7 +83,8 @@ class CallsController extends AbstractController
             'calls' => $calls,
             'resource' => $resourceArr,
             'clientType' => $clientTypeArr,
-            'user' => $userArr
+            'user' => $userArr,
+            'searchForm' => $searchForm -> createView()
         ]);
     }
     /**

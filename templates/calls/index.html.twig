@@ -21,8 +21,10 @@
                     </tr>
                 </table>
             </div>
+
             <div class="table-responsive">
                 <table id='callstable' class='table table-bordered table-condensed' border="1">
+                    <!--
                     <form role='form' action='/calls/filter' method='post'>
                         <tr id='tablerow'>
                             <th id='tablecol'>Дата звернення
@@ -94,7 +96,8 @@
                                 <input type='checkbox' name='status' value="0" title="только актуальные" />
                                 <input class='form-control' type='submit' id='go' value='Go' /> </th>
                         </tr>
-                    </form>
+                    </form> -->
+                    <tr id="tablecol">{{ form(searchForm) }}</tr>
 
 			    {% for call in calls %}
                         <tr id='tablerow'  {% if(call.status == false) %}style="color: yellow; text-shadow: #FF0000 1px -2px 2px;" {% endif %}>
@@ -106,8 +109,8 @@
                         <td id='tablecol'> {{call.description}}</td>
                         <td id='tablecol'> {{call.whattodo}}</td>
                         <td id='tablecol'> {{user[call.ingeneer] }} </td>
-                        <td id='tablecol'> {{call.service}}</td>
-                        <td id='tablecol'> {{call.trip}}</td>
+                        <td id='tablecol'>{% if call.service == 1 %} Так {% else %} Нi {% endif %}</td>
+                        <td id='tablecol'> {% if call.trip == 1 %} Так {% else %} Нi {% endif %}</td>
                         <td id='tablecol'> {{call.datesuccess|date("d.m.Y H:i") }} </td>
                         <td id='tablecol'> {{call.etcdata}} </td>
                         <td id='tablecol'>
