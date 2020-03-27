@@ -9,6 +9,7 @@ use App\Repository\UsersRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,24 +37,51 @@ class CallsController extends AbstractController
         $clientType = $this -> getDoctrine() -> getRepository(ClientType::class)->findAll();
         $users = $this -> getDoctrine() -> getRepository(Users::class) -> findAll();
         $searchForm = $this -> createFormBuilder($callsObj)
-                                    ->add('date',DateType::class,['label'=>'Дата обращения','required' =>false])
-                                    ->add('clientType', EntityType::class,[
+                                    ->add('date',HiddenType::class,
+                                        [
+                                            'required' =>false,
+                                            'attr' => ['class'=>'form-control']
+                                        ])
+                                    ->add('clientType', EntityType::class,
+                                        [
                                         'class' => clientType::class,
                                         'label' => 'Тип',
                                         'choice_label' => 'type',
                                         'required' =>false,
+                                        'attr' => ['class'=>'form-control']
                                         ])
-                                    ->add('client',TextType::class,['label' => 'Заявитель','required' =>false])
-                                    ->add('fio',TextType::class,['label' => 'Ф.И.О','required' =>false])
-                                    ->add('resource', EntityType::class,[
+                                    ->add('client',TextType::class,
+                                        [
+                                            'label' => 'Заявитель','required' =>false,
+                                            'attr' => ['class'=>'form-control']
+                                        ])
+                                    ->add('fio',TextType::class,
+                                        [
+                                            'label' => 'Ф.И.О',
+                                            'required' =>false,
+                                            'attr' => ['class'=>'form-control']
+                                        ])
+                                    ->add('resource', EntityType::class,
+                                        [
                                         'class' => Resource::class,
                                         'label' => 'Реестр',
                                         'choice_label'=> 'resource',
-                                        'required' =>false
+                                        'required' =>false,
+                                         'attr' => ['class'=>'form-control']
                                     ])
-                                    ->add('description',TextType::class,['label' => 'Описание','required' =>false])
-                                    ->add('what_to_do',TextType::class,['label' => 'Что сделано','required' =>false])
-                                    ->add('ingeneer',EntityType::class,[
+                                    ->add('description',TextType::class,
+                                        [
+                                            'label' => 'Описание',
+                                            'required' =>false,
+                                            'attr' => ['class'=>'form-control']
+                                        ])
+                                    ->add('what_to_do',TextType::class,
+                                        ['label' => 'Что сделано',
+                                            'required' =>false,
+                                            'attr' => ['class'=>'form-control']
+                                        ])
+                                    ->add('ingeneer',EntityType::class,
+                                        [
                                         'class' => Users::class,
                                         'label' => 'Исполнитель',
                                         'query_builder' => function (UsersRepository $usr) {
@@ -62,11 +90,26 @@ class CallsController extends AbstractController
                                                 ->andWhere('u.password != \'fired\'');
                                         },
                                         'choice_label' => 'short_name',
-                                        'required' =>false
+                                        'required' =>false,
+                                        'attr' => ['class'=>'form-control']
                                     ])
-                                    ->add('etc_data', TextType::class,['label' => 'Дополнительно','required' =>false])
-                                    ->add('status', CheckboxType::class,['required' =>false])
-                                    ->add('submit',SubmitType::class,['label'=> 'Поиск'])
+                                    ->add('etc_data', TextType::class,
+                                        [
+                                            'label' => 'Дополнительно',
+                                            'required' =>false,
+                                            'attr' => ['class'=>'form-control']
+                                        ])
+                                    ->add('status', CheckboxType::class,
+                                        [
+                                            'required' =>false,
+                                            'attr' => ['class'=>'form-control'],
+                                            'label' => 'Актуальные'
+                                        ])
+                                    ->add('submit',SubmitType::class,
+                                        [
+                                            'label'=> 'Поиск',
+                                            'attr' => ['class'=>'form-control']
+                                        ])
                                     ->getForm();
         var_dump($_POST);
         foreach ($calls as $call){

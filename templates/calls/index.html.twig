@@ -24,80 +24,27 @@
 
             <div class="table-responsive">
                 <table id='callstable' class='table table-bordered table-condensed' border="1">
-                    <!--
-                    <form role='form' action='/calls/filter' method='post'>
-                        <tr id='tablerow'>
-                            <th id='tablecol'>Дата звернення
-                                <input type="date" style="width: 150px !important" id='date1' value="$date1" class='form-control' />
-                                <input type="date" style="width: 150px !important" id='date2' onblur="insertDate()" value="$date2" class='form-control' />
-                                <input type="hidden" name='date' />
-                            </th>
-                            <th id='tablecol'>Тип
-                                <select class='form-control' name='client_type'>
-                                    <option value='' selected>  --- </option>
-                                    foreach($clientTypeList as $list){
-									$select = '';
-									if($list['id'] == $data['client_type']){ $select = 'selected';}
-								    echo '<option value='.$list['id'].' '.$select.'>'.$list['type'].'</option>';
-                                    }
-                                </select>
-                            </th>
-                            <th id='tablecol'>Заявник
-                                <input type="text" name="client" class="form-control" value='  $data['client'];' />
-                            </th>
-                            <th id='tablecol'>ПІБ Заявника
-                                <input type="text" name="fio" class="form-control" value="$data['fio']; "  />
-                            </th>
-                            <th id='tablecol'>Реєстр
-                                <select class='form-control' name='resource'>
-                                    <option value='' selected>  --- </option>
-                                    foreach($resource as $list){
-									$select = '';
-									if($data['resource'] == $list['id']){ $select = 'selected';}
-								    echo '<option value='.$list['id'].' '.$select.'>'.$list['resource'].'</option>';
-                                    }
-                                </select>
-                            </th>
-                            <th id='tablecol'>Опис
-                                <input type="text" name="description" class="form-control" value=' $data['description'];' />
-                            </th>
-                            <th id='tablecol'>Що зроблено
-                                <input type="text" name="what_to_do" class="form-control" value=' $data['what_to_do']' />
-                            </th>
-                            <th id='tablecol'>Виконавець
-                                <select class='form-control' name='ingeneer'>
-                                    <option value='' selected>  --- </option>
-                                    foreach($user as $list){
-									$select = '';
-									if($data['ingeneer'] == $list['id']){ $select = 'selected';}
-								    echo '<option value='.$list['id'].' '.$select.'>'.$list['short_name'].'</option>';
-                                    }
-                                </select>
-                            </th>
-                            <th id='tablecol'>Виклик
-                                <select class='form-control' name='service'>
-                                    <option value='' selected>  --- </option>
-                                    <option  if($data['service'] == 'Так'){ echo "selected"; } >Так</option>
-                                    <option  if($data['service'] == 'Ні'){ echo "selected"; } >Ні</option>
-                                </select>
-                            </th>
-                            <th id='tablecol'>Відр.
-                                <select class='form-control' name='trip'>
-                                    <option value='' selected>  --- </option>
-                                    <option $data['trip'] == 'Так'){ echo "selected"; } >Так</option>
-                                    <option $data['trip'] == 'Ні'){ echo "selected"; } >Ні</option>
-                                </select>
-                            </th>
-                            <th id='tablecol'>Дата вирішення </th>
-                            <th id='tablecol'>Додатково
-                                <input type="text" name="etc_data" class="form-control" value=" $data['etc_data']; " />
-                            </th>
-                            <th>
-                                <input type='checkbox' name='status' value="0" title="только актуальные" />
-                                <input class='form-control' type='submit' id='go' value='Go' /> </th>
-                        </tr>
-                    </form> -->
-                    <tr id="tablecol">{{ form(searchForm) }}</tr>
+                    <tr id="tablerow">
+                        {{ form_start(searchForm) }}
+                        <th id="tablecol">
+                            {{ form_row(searchForm.date) }}
+                            <input type="date" style="width: 150px !important" id='date1' value="" class='form-control' />
+                            <input type="date" style="width: 150px !important" id='date2' onblur="insertDate()" value="" class='form-control' />
+                        </th>
+                        <th id="tablecol">{{ form_row(searchForm.clientType) }} </th>
+                        <th id="tablecol">{{ form_row(searchForm.client) }} </th>
+                        <th id="tablecol">{{ form_row(searchForm.fio) }} </th>
+                        <th id="tablecol">{{ form_row(searchForm.resource) }} </th>
+                        <th id="tablecol">{{ form_row(searchForm.description) }} </th>
+                        <th id="tablecol">{{ form_row(searchForm.what_to_do) }} </th>
+                        <th id="tablecol">{{ form_row(searchForm.ingeneer) }} </th>
+                        <th>Вызов</th>
+                        <th>Комм.</th>
+                        <th>Дата реш.</th>
+                        <th id="tablecol">{{ form_row(searchForm.etc_data) }} </th>
+                        <th id="tablecol">{{ form_row(searchForm.status) }} <br> {{  form_row(searchForm.submit) }}</th>
+                        {{ form_end(searchForm) }}
+                    </tr>
 
 			    {% for call in calls %}
                         <tr id='tablerow'  {% if(call.status == false) %}style="color: yellow; text-shadow: #FF0000 1px -2px 2px;" {% endif %}>
