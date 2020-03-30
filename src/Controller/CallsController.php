@@ -4,122 +4,60 @@ namespace App\Controller;
 
 use App\Entity\ClientType;
 use App\Entity\Resource;
-//use Doctrine\DBAL\Types\DateType;
+use App\Entity\Calls;
+use App\Entity\Users;
+/*
 use App\Repository\UsersRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+
+use Symfony\Bridge\Doctrine\Form\Type\EntityType; */
+
+use App\Form\CallsSearchFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
+/*
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
-use App\Entity\Calls;
-use App\Entity\Users;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
+*/
 
 class CallsController extends AbstractController
 {
     /**
      * @Route("/calls", name="calls")
+     *
+     * Main page of Calls
      */
     public function index()
     {
+        /* set variables and object */
         $callsObj = new Calls;
         $resourceArr = array();
         $clientTypeArr = array();
         $userArr = array();
         $calendar = date('m',mktime(0,0,0,date('m',time())+1,0,date('Y',time())));
+        /* get data from db */
         $calls = $this -> getDoctrine()->getRepository(Calls::class)->findBy(array(),array('date' => 'DESC'));
         $resource = $this -> getDoctrine() -> getRepository(Resource::class)->findAll();
         $clientType = $this -> getDoctrine() -> getRepository(ClientType::class)->findAll();
         $users = $this -> getDoctrine() -> getRepository(Users::class) -> findAll();
-        $searchForm = $this -> createFormBuilder($callsObj)
-                                    ->add('date',HiddenType::class,
-                                        [
-                                            'required' =>false,
-                                            'attr' => ['class'=>'form-control']
-                                        ])
-                                    ->add('clientType', EntityType::class,
-                                        [
-                                        'class' => clientType::class,
-                                        'label' => 'Тип',
-                                        'choice_label' => 'type',
-                                        'required' =>false,
-                                        'attr' => ['class'=>'form-control']
-                                        ])
-                                    ->add('client',TextType::class,
-                                        [
-                                            'label' => 'Заявитель','required' =>false,
-                                            'attr' => ['class'=>'form-control']
-                                        ])
-                                    ->add('fio',TextType::class,
-                                        [
-                                            'label' => 'Ф.И.О',
-                                            'required' =>false,
-                                            'attr' => ['class'=>'form-control']
-                                        ])
-                                    ->add('resource', EntityType::class,
-                                        [
-                                        'class' => Resource::class,
-                                        'label' => 'Реестр',
-                                        'choice_label'=> 'resource',
-                                        'required' =>false,
-                                         'attr' => ['class'=>'form-control']
-                                    ])
-                                    ->add('description',TextType::class,
-                                        [
-                                            'label' => 'Описание',
-                                            'required' =>false,
-                                            'attr' => ['class'=>'form-control']
-                                        ])
-                                    ->add('what_to_do',TextType::class,
-                                        ['label' => 'Что сделано',
-                                            'required' =>false,
-                                            'attr' => ['class'=>'form-control']
-                                        ])
-                                    ->add('ingeneer',EntityType::class,
-                                        [
-                                        'class' => Users::class,
-                                        'label' => 'Исполнитель',
-                                        'query_builder' => function (UsersRepository $usr) {
-                                            return $usr->createQueryBuilder('u')
-                                                ->where('u.dep=\'ing\'')
-                                                ->andWhere('u.password != \'fired\'');
-                                        },
-                                        'choice_label' => 'short_name',
-                                        'required' =>false,
-                                        'attr' => ['class'=>'form-control']
-                                    ])
-                                    ->add('etc_data', TextType::class,
-                                        [
-                                            'label' => 'Дополнительно',
-                                            'required' =>false,
-                                            'attr' => ['class'=>'form-control']
-                                        ])
-                                    ->add('status', CheckboxType::class,
-                                        [
-                                            'required' =>false,
-                                            'attr' => ['class'=>'form-control'],
-                                            'label' => 'Актуальные'
-                                        ])
-                                    ->add('submit',SubmitType::class,
-                                        [
-                                            'label'=> 'Поиск',
-                                            'attr' => ['class'=>'form-control']
-                                        ])
-                                    ->getForm();
-        var_dump($_POST);
+        /* set array by data from another tables */
         foreach ($calls as $call){
             $resourceEl = $resource[$call ->getResource() -1];
             $resourceArr[$call ->getResource()] = $resourceEl ->getResource();
             $clientTypeEl = $clientType[$call->getClientType() -2];
             $clientTypeArr[$call ->getClientType()] = $clientTypeEl -> getType();
-            $userEl = $users[$call->getIngeneer() -1];
+            $userEl = $users[$call->getIngeneer()];
             $userArr[$call ->getIngeneer()] = $userEl -> getShortName();
         }
+        /* get search form from /src/Form/CallsSearchFormType.php */
+        $searchForm = $this -> createForm(CallsSearchFormType::class,$callsObj);
+        var_dump($_POST);
+        /* return data to calls/index template */
         return $this->render('calls/index.html.twig', [
             'controller_name' => 'CallsController',
             'calendar' => $calendar,
@@ -141,6 +79,9 @@ class CallsController extends AbstractController
     }
     /**
      * @Route("/calls/migrate", name="callsMigrate")
+     *
+     * function for migrate calls from old version of app
+     * need to create table with old data
      */
     public function callsOld()
     {

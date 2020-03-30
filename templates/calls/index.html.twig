@@ -28,8 +28,8 @@
                         {{ form_start(searchForm) }}
                         <th id="tablecol">
                             {{ form_row(searchForm.date) }}
-                            <input type="date" style="width: 150px !important" id='date1' value="" class='form-control' />
-                            <input type="date" style="width: 150px !important" id='date2' onblur="insertDate()" value="" class='form-control' />
+                            <input type="date" style="width: 150px !important" id='date1' name="date1" value="" class='form-control' />
+                            <input type="date" style="width: 150px !important" id='date2' name="date2" onblur="insertDate()" value="" class='form-control' />
                         </th>
                         <th id="tablecol">{{ form_row(searchForm.clientType) }} </th>
                         <th id="tablecol">{{ form_row(searchForm.client) }} </th>
