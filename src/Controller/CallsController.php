@@ -6,24 +6,12 @@ use App\Entity\ClientType;
 use App\Entity\Resource;
 use App\Entity\Calls;
 use App\Entity\Users;
-/*
-use App\Repository\UsersRepository;
-
-use Symfony\Bridge\Doctrine\Form\Type\EntityType; */
 
 use App\Form\CallsSearchFormType;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use PhpParser\Node\Expr\Cast\Object_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-/*
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\HttpFoundation\Response;
-*/
 
 class CallsController extends AbstractController
 {
@@ -39,9 +27,12 @@ class CallsController extends AbstractController
         $resourceArr = array();
         $clientTypeArr = array();
         $userArr = array();
+
         $calendar = date('m',mktime(0,0,0,date('m',time())+1,0,date('Y',time())));
         /* get data from db */
         $calls = $this -> getDoctrine()->getRepository(Calls::class)->findBy(array(),array('date' => 'DESC'));
+        $paginator = new Paginator($calls);
+        var_dump($paginator);
         $resource = $this -> getDoctrine() -> getRepository(Resource::class)->findAll();
         $clientType = $this -> getDoctrine() -> getRepository(ClientType::class)->findAll();
         $users = $this -> getDoctrine() -> getRepository(Users::class) -> findAll();
@@ -51,12 +42,22 @@ class CallsController extends AbstractController
             $resourceArr[$call ->getResource()] = $resourceEl ->getResource();
             $clientTypeEl = $clientType[$call->getClientType() -2];
             $clientTypeArr[$call ->getClientType()] = $clientTypeEl -> getType();
-            $userEl = $users[$call->getIngeneer()];
+            $userEl = $users[$call->getIngeneer()+1];
             $userArr[$call ->getIngeneer()] = $userEl -> getShortName();
+
+            if(isset($_POST)){
+               if($_POST['calls_search_form']['clientType'] == $clientTypeEl->getId())
+               {
+                   $callsObj-> setClientType($clientTypeEl->getId());
+               }
+            }
+
         }
         /* get search form from /src/Form/CallsSearchFormType.php */
+        //var_dump($clientType);
+        //var_dump($callsObj);
         $searchForm = $this -> createForm(CallsSearchFormType::class,$callsObj);
-        var_dump($_POST);
+        //var_dump($_POST);
         /* return data to calls/index template */
         return $this->render('calls/index.html.twig', [
             'controller_name' => 'CallsController',
@@ -83,6 +84,7 @@ class CallsController extends AbstractController
      * function for migrate calls from old version of app
      * need to create table with old data
      */
+    /*
     public function callsOld()
     {
         $conn = $this->getDoctrine()->getConnection('od');
@@ -135,5 +137,5 @@ class CallsController extends AbstractController
             $entity -> flush();
         }
         return new Response('Saved new call with id '.$calls->getId());
-    }
+    }*/
 }

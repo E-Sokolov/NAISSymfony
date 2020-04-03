@@ -8,6 +8,8 @@ use App\Entity\Resource;
 use App\Entity\Users;
 use App\Repository\UsersRepository;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -16,12 +18,12 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 class CallsSearchFormType extends AbstractType
 {
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        var_dump($options);
+        $clientType = $options['data'] -> getClientType();
         $builder
             ->add('date',HiddenType::class,
             [
@@ -34,8 +36,9 @@ class CallsSearchFormType extends AbstractType
                 'label' => 'Тип',
                 'choice_label' => 'type',
                 'required' =>false,
-                'attr' => ['class'=>'form-control', 'value' => (isset($_POST['calls_search_form']['clientType'])) ? $_POST['calls_search_form']['clientType']:''],
-                'choice_value' => $options['data'] -> getClientType($_POST['calls_search_form']['clientType'])
+                'attr' => ['class'=>'form-control'],
+                'choices' => Null
+
             ])
         ->add('client',TextType::class,
             [

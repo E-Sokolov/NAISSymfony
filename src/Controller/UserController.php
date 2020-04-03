@@ -14,13 +14,16 @@ class UserController extends AbstractController
      */
     public function index()
     {
+        $calendar = date('m',mktime(0,0,0,date('m',time())+1,0,date('Y',time())));
         return $this->render('user/index.html.twig', [
             'controller_name' => 'UserController',
+            'calendar' => $calendar
         ]);
     }
     /**
      * @Route("/user/migrate", name="userMigrate")
      */
+    /*
     public function migrateUser()
     {
         $conn = $this->getDoctrine()->getConnection('glb');
@@ -62,5 +65,5 @@ class UserController extends AbstractController
             $entity -> flush();
         }
         return new Response('Saved new user with id '.$users->getId());
-    }
+    }*/
 }
