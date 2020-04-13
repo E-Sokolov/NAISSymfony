@@ -23,7 +23,7 @@ class UserController extends AbstractController
     /**
      * @Route("/user/migrate", name="userMigrate")
      */
-    /*
+/*
     public function migrateUser()
     {
         $conn = $this->getDoctrine()->getConnection('glb');
@@ -65,5 +65,5 @@ class UserController extends AbstractController
             $entity -> flush();
         }
         return new Response('Saved new user with id '.$users->getId());
-    }*/
+    } */
 }

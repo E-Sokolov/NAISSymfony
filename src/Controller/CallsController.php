@@ -30,9 +30,12 @@ class CallsController extends AbstractController
 
         $calendar = date('m',mktime(0,0,0,date('m',time())+1,0,date('Y',time())));
         /* get data from db */
-        $calls = $this -> getDoctrine()->getRepository(Calls::class)->findBy(array(),array('date' => 'DESC'));
-        $paginator = new Paginator($calls);
-        var_dump($paginator);
+        if(isset($_POST['calls_search_form']))
+        {
+           $calls = $this -> getDoctrine()->getRepository(Calls::class)->getFilteredCalls($_POST['calls_search_form']);
+        }else{
+            $calls = $this -> getDoctrine()->getRepository(Calls::class)->findBy(array(),array('date' => 'DESC'));
+        }
         $resource = $this -> getDoctrine() -> getRepository(Resource::class)->findAll();
         $clientType = $this -> getDoctrine() -> getRepository(ClientType::class)->findAll();
         $users = $this -> getDoctrine() -> getRepository(Users::class) -> findAll();
@@ -42,16 +45,8 @@ class CallsController extends AbstractController
             $resourceArr[$call ->getResource()] = $resourceEl ->getResource();
             $clientTypeEl = $clientType[$call->getClientType() -2];
             $clientTypeArr[$call ->getClientType()] = $clientTypeEl -> getType();
-            $userEl = $users[$call->getIngeneer()+1];
+            $userEl = $users[$call->getIngeneer()-1];
             $userArr[$call ->getIngeneer()] = $userEl -> getShortName();
-
-            if(isset($_POST)){
-               if($_POST['calls_search_form']['clientType'] == $clientTypeEl->getId())
-               {
-                   $callsObj-> setClientType($clientTypeEl->getId());
-               }
-            }
-
         }
         /* get search form from /src/Form/CallsSearchFormType.php */
         //var_dump($clientType);

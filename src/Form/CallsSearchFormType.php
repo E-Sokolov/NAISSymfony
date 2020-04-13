@@ -81,6 +81,7 @@ class CallsSearchFormType extends AbstractType
                         ->andWhere('u.password != \'fired\'');
                     },
                 'choice_label' => 'short_name',
+                'choice_value' =>'id',
                 'required' =>false,
                 'attr' => ['class'=>'form-control','value' => (isset( $_POST['calls_search_form']['ingeneer'])) ?  $_POST['calls_search_form']['ingeneer']:'']
             ])
