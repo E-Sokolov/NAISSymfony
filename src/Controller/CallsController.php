@@ -9,6 +9,7 @@ use App\Entity\Users;
 
 use App\Form\CallsSearchFormType;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use phpDocumentor\Reflection\Types\String_;
 use PhpParser\Node\Expr\Cast\Object_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,15 +28,11 @@ class CallsController extends AbstractController
         $resourceArr = array();
         $clientTypeArr = array();
         $userArr = array();
-
+        $filter = (isset($_POST['calls_search_form'])) ? $_POST['calls_search_form']: array();
         $calendar = date('m',mktime(0,0,0,date('m',time())+1,0,date('Y',time())));
         /* get data from db */
-        if(isset($_POST['calls_search_form']))
-        {
-           $calls = $this -> getDoctrine()->getRepository(Calls::class)->getFilteredCalls($_POST['calls_search_form']);
-        }else{
-            $calls = $this -> getDoctrine()->getRepository(Calls::class)->findBy(array(),array('date' => 'DESC'));
-        }
+        $calls = $this -> getDoctrine()->getRepository(Calls::class)->getFilteredCalls($filter);
+
         $resource = $this -> getDoctrine() -> getRepository(Resource::class)->findAll();
         $clientType = $this -> getDoctrine() -> getRepository(ClientType::class)->findAll();
         $users = $this -> getDoctrine() -> getRepository(Users::class) -> findAll();

@@ -64,7 +64,11 @@ class CallsRepository extends ServiceEntityRepository
         {
             $q -> andWhere('calls.status = \''.$filter['status'].'\'');
         }
-        return $q->getQuery()->getResult();
+        $result = $q->getQuery()->getResult();
+        //var_dump($result);
+        $stat = $q->select('count(calls.id)')->getQuery()->getScalarResult();
+        var_dump($stat);
+        return $result;
     }
     // /**
     //  * @return Calls[] Returns an array of Calls objects
