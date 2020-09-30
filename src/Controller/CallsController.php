@@ -85,7 +85,15 @@ class CallsController extends AbstractController
             'errors' => $errors
         ]);
     }
-
+    /**
+     * @Route("/calls/autocomplete/[col]/[q]")
+     * Generete pdge for jQuery Autocomplete
+     */
+    function autocomplete()
+    {
+        
+        return $this->render('calls/autocomlete.html.twig');
+    }
     /**
      * @Route("/calls/migrate", name="callsMigrate")
      *
