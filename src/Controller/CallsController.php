@@ -13,6 +13,7 @@ use phpDocumentor\Reflection\Types\String_;
 use PhpParser\Node\Expr\Cast\Object_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 class CallsController extends AbstractController
 {
@@ -42,14 +43,14 @@ class CallsController extends AbstractController
             $resourceArr[$call ->getResource()] = $resourceEl ->getResource();
             $clientTypeEl = $clientType[$call->getClientType() -2];
             $clientTypeArr[$call ->getClientType()] = $clientTypeEl -> getType();
-            $userEl = $users[$call->getIngeneer()-1];
+            $userEl = $users[$call->getIngeneer()];
             $userArr[$call ->getIngeneer()] = $userEl -> getShortName();
         }
         /* get search form from /src/Form/CallsSearchFormType.php */
-        //var_dump($clientType);
-        //var_dump($callsObj);
+
         $searchForm = $this -> createForm(CallsSearchFormType::class,$callsObj);
-        //var_dump($_POST);
+        
+
         /* return data to calls/index template */
         return $this->render('calls/index.html.twig', [
             'controller_name' => 'CallsController',
@@ -66,10 +67,25 @@ class CallsController extends AbstractController
      */
     public function add()
     {
+        $callObj = new Calls;
+        $addForm = $this ->createForm(\App\Form\AddCallType::class,$callObj);
+        /* if get data from form */
+        $errors = array();
+        if(isset($_POST['add_call']))
+        {
+            //print_r($errors);
+            $errors = $this ->getDoctrine()->getRepository(Calls::class)->addCall($_POST['add_call']);
+            if(count($errors) == 0){
+                return $this ->redirectToRoute('calls');
+            }
+        }
         return $this->render('calls/add.html.twig', [
             'controller_name' => 'CallsController',
+            'addForm'=> $addForm ->createView(),
+            'errors' => $errors
         ]);
     }
+
     /**
      * @Route("/calls/migrate", name="callsMigrate")
      *
@@ -90,7 +106,17 @@ class CallsController extends AbstractController
         foreach ($calls_old as $oldcall)
         {
             $calls = new Calls();
-            $phone = strstr($oldcall['etc_data'],'048');
+            $telCodes = ['048','097','068','067','093','063','066','094','050'];
+            foreach ($telCodes as $needle){
+                $str = preg_replace("/[^0-9]/", '',$oldcall['etc_data']);
+                echo $str.' - ';
+                $phone = strstr($str,$needle);
+                echo $phone.'<br>';
+                if($phone != ''){
+                    break;
+                }
+            }
+
             $newdate = new \DateTime('@'.strtotime($oldcall['date'].' '.$oldcall['time']));
             if(!empty($oldcall['date_success']))
             {
@@ -129,5 +155,5 @@ class CallsController extends AbstractController
             $entity -> flush();
         }
         return new Response('Saved new call with id '.$calls->getId());
-    }*/
+    */
 }
