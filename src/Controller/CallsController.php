@@ -86,13 +86,19 @@ class CallsController extends AbstractController
         ]);
     }
     /**
-     * @Route("/calls/autocomplete/[col]/[q]")
-     * Generete pdge for jQuery Autocomplete
+     * @Route("/calls/autocomplete/{col}")
+     * Generete page for jQuery Autocomplete
      */
-    function autocomplete()
+    function autocomplete($col)
     {
-        
-        return $this->render('calls/autocomlete.html.twig');
+        $q = $_GET['q'];
+        ($col == 'client' OR $col == 'fio')?  $repository = Clients::class: $repository = Calls::class;
+        $resultQ = $this->getDoctrine()->getRepository($repository)->autocomplete($col,$q);
+        return $this->render('calls/autocomlete.html.twig',
+                array(
+                    'col' => $col,
+                    'result' => $resultQ
+                ));
     }
     /**
      * @Route("/calls/migrate", name="callsMigrate")
